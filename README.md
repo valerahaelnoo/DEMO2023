@@ -210,12 +210,67 @@ firewall-cmd --reload
 <h4>RTR-L</h4>
 <pre>vim /etc/network/interfaces</pre>
 
-![Image alt]()
+![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/RTR-L_GRE.png?raw=true)
 
 <pre>systemctl restart networking </pre>
 <h4>RTR-R</h4>
 <pre>vim /etc/network/interfaces</pre>
 
-![Image alt]()
+![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/RTR-R_GRE.png?raw=true)
 
 <pre>systemctl restart networking </pre>
+
+<h3><strong>2.4.</strong> Настройте динамическую маршрутизацию между платформами <strong>RTR-L</strong> и <strong>RTR-R.</strong></h3>
+<h4>RTR-L</h4>
+<p>подключить debian-11.6.0-amd64-BD-2</P>
+<pre>
+apt-cdrom add
+apt install -y frr<br>
+</pre>
+<pre>
+vim /etc/frr/daemons<br>
+...
+ospfd=yes
+...
+</pre>
+<pre>
+systemctl restart frr
+systemctl enable frr
+</pre>
+
+![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/RTR-L_OSPF.png?raw=true)
+
+<h4>RTR-R</h4>
+<p>подключить debian-11.6.0-amd64-BD-2</P>
+<pre>
+apt-cdrom add
+apt install -y frr<br>
+</pre>
+<pre>
+vim /etc/frr/daemons<br>
+...
+ospfd=yes
+...
+</pre>
+<pre>
+systemctl restart frr
+systemctl enable frr
+</pre>
+
+![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/RTR-R_OSPF.png?raw=true)
+
+<h3><strong>2.5.</strong> Трафик, идущий по туннелю между регионами по внутренним адресам, не должен транслироваться.</h3>
+<h4>RTR-L</h4>
+<pre>
+firewall-cmd --permanent --zone=internal --add-inteface=gre1
+firewall-cmd --permanent --zone=internal --add-protocol={gre,ospf}
+firewall-cmd --permanent --zone=dmz --add-protocol={gre,ospf}
+firewall-cmd --reload
+</pre>
+<h4>RTR-R</h4>
+<pre>
+firewall-cmd --permanent --zone=internal --add-inteface=gre1
+firewall-cmd --permanent --zone=internal --add-protocol={gre,ospf}
+firewall-cmd --permanent --zone=dmz --add-protocol={gre,ospf}
+firewall-cmd --reload
+</pre>
