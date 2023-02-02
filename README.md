@@ -225,7 +225,7 @@ firewall-cmd --reload
 <p>подключить debian-11.6.0-amd64-BD-2</P>
 <pre>
 apt-cdrom add
-apt install -y frr<br>
+apt install -y frr
 </pre>
 <pre>
 vim /etc/frr/daemons<br>
@@ -244,7 +244,7 @@ systemctl enable frr
 <p>подключить debian-11.6.0-amd64-BD-2</P>
 <pre>
 apt-cdrom add
-apt install -y frr<br>
+apt install -y frr
 </pre>
 <pre>
 vim /etc/frr/daemons<br>
