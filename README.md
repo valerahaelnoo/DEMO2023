@@ -6,7 +6,6 @@
 <h2>Задание модуля 1:</h2>
 
 ![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/topology.png?raw=true)
-
 <h2><strong>1. Выполнение проектирования кабельной структуры компьютерной сети.</strong></h2>
 
 <h2>Виртуальные машины и коммутация</h2>
