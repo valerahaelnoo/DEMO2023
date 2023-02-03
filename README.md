@@ -392,7 +392,7 @@ zone "demo.wsr" {
 </pre>
 <pre>vim /opt/dns/demo.db</pre>
 
-![Image alt]()
+![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/demo.db.png?raw=true)
 
 <pre>systemctl restatr bind9</pre>
 <h4>RTR-L</h4>
