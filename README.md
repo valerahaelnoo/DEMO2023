@@ -400,3 +400,32 @@ zone "demo.wsr" {
 firewall-cmd --permanent --zone=dmz --add-forward-port=port=53:proto={tcp,udp}:toport=53:toaddr=192.168.200.200
 firewall-cmd --reload
 </pre>
+
+<h3><strong>2.2.</strong> Выполните настройку второго уровня DNS-системы стенда;</h3>
+<h4>SRV</h4>
+<pre>
+Install-WindowsFeature -Name DNS -IncludeManagementTools
+</pre>
+<pre>
+Add-DnsServerPrimaryZone -Name "int.demo.wsr" -ZoneFile "int.demo.wsr.dns"
+</pre>
+<pre>
+Add-DnsServerPrimaryZone -NetworkId 192.168.200.0/24 -ZoneFile "int.demo.wsr.dns"
+Add-DnsServerPrimaryZone -NetworkId 172.16.100.0/24 -ZoneFile "int.demo.wsr.dns"
+</pre>
+<pre>
+Add-DnsServerResourceRecordA -Name "web-l" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.200.100" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "WEB-R" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.100" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "SRV" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.200.200" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-l" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "192.168.200.254" -CreatePtr 
+Add-DnsServerResourceRecordA -Name "rtr-r" -ZoneName "int.demo.wsr" -AllowUpdateAny -IPv4Address "172.16.100.254" -CreatePtr
+</pre>
+<pre>
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "web-l.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "webapp" -HostNameAlias "WEB-R.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "ntp" -HostNameAlias "SRV.int.demo.wsr" -ZoneName "int.demo.wsr"
+Add-DnsServerResourceRecordCName -Name "dns" -HostNameAlias "SRV.int.demo.wsr" -ZoneName "int.demo.wsr"
+</pre>
+
+![Image alt](https://github.com/NewErr0r/DEMO2023/blob/main/images/int.demo.wsr.png?raw=true)
+
