@@ -274,3 +274,47 @@ firewall-cmd --permanent --zone=internal --add-protocol={gre,ospf}
 firewall-cmd --permanent --zone=dmz --add-protocol={gre,ospf}
 firewall-cmd --reload
 </pre>
+
+<h2>Модуль 2: Организация сетевого администрирования</h2>
+
+<p>Таблица 2. DNS-записи зон</p>
+
+![Image alt]()
+
+<h2><strong>1. Администрирование локальных вычислительных сетей и принятие мер по устранению возможных сбоев</strong></h2>
+
+<h2>Сетевая связанность</h2>
+<p><strong>1.1.</strong> Сети, подключенные к <strong>ISP</strong>, считаются внешними:</p>
+<p>- Запрещено прямое попадание трафика из внутренних сетей во внешние и наоборот;</p>
+<p><strong>1.2.</strong> Обеспечьте настройку служб SSH региона Left:</p>
+<p>a. Подключения со стороны внешних сетей по протоколу к платформе управления трафиком <strong>RTR-L</strong> на порт 2244 должны быть перенаправлены на ВМ <strong>Web-L</strong>;</p>
+<p>b. Подключения со стороны внешних сетей по протоколу к платформе управления трафиком <strong>RTR-L</strong> на порт 2222 должны быть перенаправлены на ВМ <strong>WEB-R.</strong></p>
+
+<h3><strong>1.1.</strong> Сети, подключенные к <strong>ISP</strong>, считаются внешними:</h3>
+<p>Маскарадинг был включён ранее</p>
+
+<h3><strong>1.2.</strong> Обеспечьте настройку служб SSH региона Left:</h3>
+<h4>RTR-L</h4>
+<pre>
+firewall-cmd --permanent --zone=dmz --add-forward-port=port=2244:proto=tcp:toport=22:toaddr=192.168.200.100
+firewall-cmd --permanent --zone=dmz --add-forward-port=port=2222:proto=tcp:toport=22:toaddr=172.16.100.100
+firewall-cmd --reload
+</pre>
+<h4>WEB-L</h4>
+<pre>
+vim /etc/ssh/sshd_config
+...
+PermitRootLogin yes
+...
+</pre>
+<pre>systemctl restart sshd</pre>
+<h4>WEB-R</h4>
+<pre>
+vim /etc/ssh/sshd_config
+...
+PermitRootLogin yes
+...
+</pre>
+<pre>systemctl restart sshd</pre>
+
+
